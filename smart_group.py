@@ -33,6 +33,6 @@ class SmartGroupListener(sublime_plugin.EventListener):
 
 	def rank_group_by_common_prefix(self, view, group):
 		window = view.window()
-		filenames = [v.file_name() for v in window.views_in_group(group) if v != view] + [view.file_name()]
-		prefix = os.path.commonprefix(filenames)
-		return (group, len(prefix))
+		views = [v for v in window.views_in_group(group) if v != view]
+		ranking = max(len(os.path.commonprefix([view.file_name(), v.file_name()])) for v in views)
+		return (group, ranking)
